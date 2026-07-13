@@ -52,9 +52,9 @@ export default function LoginPage() {
 
         <div className="bg-surface border border-line rounded-xl p-8 shadow-sm">
           <h1 className="text-lg font-bold text-ink mb-1">Sign in</h1>
-          <p className="text-xs text-ink-faint font-mono mb-6">
+          {/* <p className="text-xs text-ink-faint font-mono mb-6">
             Dev-mode login · not production auth
-          </p>
+          </p> */}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
