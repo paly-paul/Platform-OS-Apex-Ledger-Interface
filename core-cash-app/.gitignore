@@ -1,0 +1,13 @@
+# Next.js
+.next/
+out/
+
+# Node
+node_modules/
+
+# Env (has no secrets but keep as convention)
+.env*.local
+
+# Build artifacts
+*.tsbuildinfo
+next-env.d.ts
