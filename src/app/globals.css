@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS custom properties kept for styled-components and any non-Tailwind usage */
+:root {
+  --paper: #F7F8F6;
+  --ink: #14181C;
+  --ink-soft: #5B6570;
+  --ink-faint: #8A939B;
+  --line: #E1E4E0;
+  --surface: #FFFFFF;
+  --verified: #0B6E4F;
+  --verified-bg: #E8F2ED;
+  --alert: #B4442E;
+  --alert-bg: #F7EAE7;
+  --amber: #B8860B;
+  --amber-bg: #FBF3E2;
+  --tax-gold: #9C7A32;
+  --tax-gold-strong: #7A5F24;
+  --tax-gold-bg: #F6F0E3;
+  --font-display: 'Instrument Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 64px;
+  --chat-popup-w: 360px;
+  --chat-popup-h: 520px;
+  --chat-fab-size: 56px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-display);
+  background: var(--paper);
+  color: var(--ink);
+  height: 100vh;
+  overflow: hidden;
+}
+
+@layer utilities {
+  .font-display { font-family: var(--font-display); }
+  .font-mono-apex { font-family: var(--font-mono); }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2); }
+}
