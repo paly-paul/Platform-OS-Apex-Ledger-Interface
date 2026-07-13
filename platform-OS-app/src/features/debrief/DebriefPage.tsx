@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { useAppDispatch } from '@/hooks/redux';
-import { setActivePage } from '@/features/ui/uiSlice';
+import { useRouter } from 'next/navigation';
 
 export default function DebriefPage() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  void dispatch;
   const [checked, setChecked] = useState({ 'agenda-1': false, 'agenda-2': false, 'agenda-3': false });
   const [finalized, setFinalized] = useState(false);
   const [toast, setToast] = useState('');
@@ -108,7 +110,7 @@ export default function DebriefPage() {
                 <div className="text-[11px] text-ink-soft font-mono">{item.meta}</div>
               </div>
               <button
-                onClick={() => dispatch(setActivePage('audit'))}
+                onClick={() => router.push('/dashboard/audit')}
                 className="text-[11px] font-semibold px-[10px] py-[5px] rounded-[6px] border border-line bg-paper text-ink cursor-pointer flex-shrink-0"
                 title="Full trail view on Audit Trail page"
               >

@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useAppDispatch } from '@/hooks/redux';
-import { openChat, setActivePage } from '@/features/ui/uiSlice';
+import { useRouter } from 'next/navigation';
+import { openChat } from '@/features/ui/uiSlice';
 
 export default function SummaryPage() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const [secsAgo, setSecsAgo] = useState(3);
   const [countdown, setCountdown] = useState(297);
   const [openDetails, setOpenDetails] = useState<Record<string, boolean>>({});
@@ -130,7 +132,7 @@ export default function SummaryPage() {
             <div className="text-[11px] text-tax-gold-strong font-mono">Distribution window closes in 18 days for full deduction eligibility</div>
           </div>
           <button
-            onClick={() => dispatch(setActivePage('tax'))}
+            onClick={() => router.push('/dashboard/tax')}
             className="mt-2 w-full py-[9px] rounded-lg border-none bg-tax-gold-strong text-white font-semibold text-xs cursor-pointer hover:opacity-90 transition-opacity"
           >
             Open Tax Assessment →

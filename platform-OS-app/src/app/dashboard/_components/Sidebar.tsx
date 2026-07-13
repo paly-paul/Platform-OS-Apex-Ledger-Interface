@@ -1,11 +1,12 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { toggleSidebar } from '@/features/ui/uiSlice';
-import { setActivePage, type PageId } from '@/features/ui/uiSlice';
 
 interface NavItem {
-  id: PageId;
+  slug: string;
   label: string;
   badge?: string;
   taxMode?: boolean;
@@ -17,7 +18,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     label: 'Ingestion',
     items: [
       {
-        id: 'account-master',
+        slug: 'account-master',
         label: 'Account Master',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -26,7 +27,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
         ),
       },
       {
-        id: 'uploads',
+        slug: 'uploads',
         label: 'Uploads',
         badge: '1',
         icon: (
@@ -41,7 +42,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     label: 'Reporting',
     items: [
       {
-        id: 'performance',
+        slug: 'performance',
         label: 'Performance (XIRR)',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -50,7 +51,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
         ),
       },
       {
-        id: 'historical-roi',
+        slug: 'historical-roi',
         label: 'Historical ROI',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -64,7 +65,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     label: 'Liquidity',
     items: [
       {
-        id: 'cashflow',
+        slug: 'cashflow',
         label: 'Fund Flow',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -73,7 +74,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
         ),
       },
       {
-        id: 'forecast',
+        slug: 'forecast',
         label: 'Liquidity Forecast',
         badge: '1',
         icon: (
@@ -88,7 +89,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     label: 'Market Intel',
     items: [
       {
-        id: 'benchmarking',
+        slug: 'benchmarking',
         label: 'Benchmarking',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -97,7 +98,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
         ),
       },
       {
-        id: 'corp-actions',
+        slug: 'corp-actions',
         label: 'Corporate Actions',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -106,7 +107,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
         ),
       },
       {
-        id: 'concentration',
+        slug: 'concentration',
         label: 'Concentration Risk',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -120,7 +121,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     label: 'Tax',
     items: [
       {
-        id: 'tax',
+        slug: 'tax',
         label: 'Tax Assessment',
         badge: '2',
         taxMode: true,
@@ -136,7 +137,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     label: 'Insights',
     items: [
       {
-        id: 'summary',
+        slug: 'summary',
         label: 'AI Summary',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -146,7 +147,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
         ),
       },
       {
-        id: 'debrief',
+        slug: 'debrief',
         label: 'De-Briefing',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -160,7 +161,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     label: 'System',
     items: [
       {
-        id: 'audit',
+        slug: 'audit',
         label: 'Audit Trail',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -169,7 +170,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
         ),
       },
       {
-        id: 'settings',
+        slug: 'settings',
         label: 'Settings',
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -184,7 +185,7 @@ const navGroups: { label: string; items: NavItem[] }[] = [
 export default function Sidebar() {
   const dispatch = useAppDispatch();
   const collapsed = useAppSelector((s) => s.ui.sidebarCollapsed);
-  const activePage = useAppSelector((s) => s.ui.activePage);
+  const pathname = usePathname();
 
   return (
     <div
@@ -225,12 +226,11 @@ export default function Sidebar() {
       {navGroups.map((group) => (
         <NavGroup key={group.label} label={group.label} collapsed={collapsed}>
           {group.items.map((item) => (
-            <NavItemButton
-              key={item.id}
+            <NavItemLink
+              key={item.slug}
               item={item}
-              active={activePage === item.id}
+              active={pathname === `/dashboard/${item.slug}`}
               collapsed={collapsed}
-              onClick={() => dispatch(setActivePage(item.id))}
             />
           ))}
         </NavGroup>
@@ -253,28 +253,27 @@ function NavGroup({ label, collapsed, children }: { label: string; collapsed: bo
   );
 }
 
-function NavItemButton({
+function NavItemLink({
   item,
   active,
   collapsed,
-  onClick,
 }: {
   item: NavItem;
   active: boolean;
   collapsed: boolean;
-  onClick: () => void;
 }) {
   const activeClass = item.taxMode
     ? 'bg-tax-gold-bg text-tax-gold-strong font-semibold border-l-2 border-tax-gold'
     : 'bg-verified-bg text-verified font-semibold border-l-2 border-verified';
 
   return (
-    <div
-      onClick={onClick}
-      className={`flex items-center gap-[10px] px-[10px] py-[9px] rounded-lg text-[13px] font-medium text-ink-soft cursor-pointer whitespace-nowrap relative mb-0.5 border-l-2 border-transparent hover:bg-paper ${active ? activeClass : ''}`}
+    <Link
+      href={`/dashboard/${item.slug}`}
+      className={`flex items-center gap-[10px] px-[10px] py-[9px] rounded-lg text-[13px] font-medium text-ink-soft cursor-pointer whitespace-nowrap relative mb-0.5 border-l-2 border-transparent hover:bg-paper no-underline ${active ? activeClass : ''}`}
       style={{
         justifyContent: collapsed ? 'center' : undefined,
         padding: collapsed ? '9px' : undefined,
+        textDecoration: 'none',
       }}
     >
       <div className="flex-shrink-0 w-[17px] h-[17px]">{item.icon}</div>
@@ -291,6 +290,6 @@ function NavItemButton({
           {collapsed ? '' : item.badge}
         </span>
       )}
-    </div>
+    </Link>
   );
 }
